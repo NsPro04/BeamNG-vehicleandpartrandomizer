@@ -1,10 +1,10 @@
-local M, nop, im = {}, nop, ui_imgui
+local M, nop, im, clamp = {}, nop, ui_imgui, clamp
 
 local windowOpen = im.BoolPtr(false)
 
 local windowSize = {
-	width =  ((((GFXDevice or {}).getDesktopMode or nop)() or {}).width  or 2560)/16*2,
-	height = ((((GFXDevice or {}).getDesktopMode or nop)() or {}).height or 1440)/9*1.2
+	width =  ((((GFXDevice or {}).getDesktopMode or nop)() or {}).width  or 2560)/16*2.1, --336
+	height = ((((GFXDevice or {}).getDesktopMode or nop)() or {}).height or 1440)/ 9*1.4  --224
 }
 
 local pages = {
@@ -13,15 +13,15 @@ local pages = {
 }
 
 local currentPage = {
-	value = 1,
-	min = 1,
-	max = #pages,
+	__value = 1,
+	min = function(self) return 1 end,
+	max = function(self) return #pages end,
 
 	inc = function(self) return self:set(self:get() + 1) end,
 	dec = function(self) return self:set(self:get() - 1) end,
-	get = function(self) return self.value end,
+	get = function(self) return self.__value end,
 	set = function(self, new_value)
-		self.value = clamp(new_value, self.min, self.max)
+		self.__value = clamp(new_value, self:min(), self:max())
 		return self:get()
 	end
 }
@@ -30,8 +30,8 @@ local function onUpdate(dt)
 	if not windowOpen[0] then return end
 
 	im.SetNextWindowSize(im.ImVec2(windowSize.width, windowSize.height), im.Cond_FirstUseEver)
-	im.Begin("Vehicle And Part Randomizer by _N_S_ v2", windowOpen)
-		local SCALE = im.GetWindowWidth() / 320
+	im.Begin("Vehicle And Part Randomizer by _N_S_ v3", windowOpen)
+		local SCALE = im.GetWindowWidth() / 336
 		im.SetWindowFontScale(SCALE)
 
 		do
@@ -45,7 +45,7 @@ local function onUpdate(dt)
 			im.SameLine()
 
 			local availWidth = im.GetContentRegionAvailWidth()
-			local text = currentPage:get() .. "/" .. (#pages)
+			local text = currentPage:get() .. "/" .. currentPage:max()
 			local textSize = im.CalcTextSize(text).x
 			local indent = (windowWidth - pos * 2 - buttonSize * 2 - textSize) / 2
 

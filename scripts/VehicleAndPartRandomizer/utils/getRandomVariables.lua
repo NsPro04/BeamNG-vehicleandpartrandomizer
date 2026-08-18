@@ -1,10 +1,10 @@
-local core_vehicle_manager, type, unpack, pcall, pairs, math, isnaninf, clamp, next = core_vehicle_manager, type, unpack, pcall, pairs, math, isnaninf, clamp, next
+local core_vehicle_manager, unpack, pcall, type, pairs, math, isnaninf, clamp, next = core_vehicle_manager, unpack, pcall, type, pairs, math, isnaninf, clamp, next
 
-local function getRandomVariables(vehicle, config, jbeamLoader)
+local jbeamLoader = require "jbeam/loader"
+
+local function getRandomVariables(vehicle, config)
 	local vehicleID = vehicle:getID()
-
 	local currentVehicleBundle = core_vehicle_manager.getVehicleData(vehicleID)
-	if type(currentVehicleBundle) ~= "table" then return end
 
 	local ok, vehicleBundle = unpack(config ~= nil and {
 		pcall(function()
@@ -19,19 +19,23 @@ local function getRandomVariables(vehicle, config, jbeamLoader)
 
 	local variables = {}
 
-	for variablesName, variablesData in pairs(vehicleBundle.vdata.variables) do
-		local min = math.min(variablesData.max, variablesData.min)
-		local max = math.max(variablesData.max, variablesData.min)
-		local minDis = math.min(variablesData.maxDis, variablesData.minDis)
-		local maxDis = math.max(variablesData.maxDis, variablesData.minDis)
+	for name, data in pairs(vehicleBundle.vdata.variables) do
+		if data.type ~= "range" then goto CONTINUE end
+
+		local min = math.min(data.max, data.min)
+		local max = math.max(data.max, data.min)
+		local minDis = math.min(data.maxDis, data.minDis)
+		local maxDis = math.max(data.maxDis, data.minDis)
 		local dist1 = max - min
 		local dist2 = maxDis - minDis
-		local stepDis = math.abs(variablesData.stepDis)
+		local stepDis = math.abs(data.stepDis)
 		local step = dist2 == 0 and 0 or stepDis * dist1 / dist2
 		local stepCount = (step == 0 or dist1 == 0) and 0 or math.ceil(dist1 / math.min(step, dist1))
 		if not isnaninf(dist1 + dist2 + stepDis + step + stepCount) then
-			variables[variablesName] = clamp(math.random(0, stepCount) * step + min, min, max)
+			variables[name] = clamp(math.random(0, stepCount) * step + min, min, max)
 		end
+
+		::CONTINUE::
 	end
 
 	return next(variables) ~= nil and variables or nil
