@@ -1,0 +1,5 @@
+{
+	"bindings":[
+		{"control":"shift backspace", "action":"toggle_VAPR"}
+	]
+}

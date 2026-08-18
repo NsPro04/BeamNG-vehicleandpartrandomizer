@@ -1,0 +1,10 @@
+{
+	"toggle_VAPR": {
+		"actionMap": "Global",
+		"cat": "general",
+		"ctx": "tlua",
+		"onDown":"if scripts_VehicleAndPartRandomizer_extensions then scripts_VehicleAndPartRandomizer_extensions.toggleUI() end",
+		"title": "Toggle Vehicle And Part Randomizer",
+		"desc":  "Toggle Vehicle And Part Randomizer"
+	}
+}
