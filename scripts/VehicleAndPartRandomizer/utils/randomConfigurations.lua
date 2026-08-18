@@ -1,4 +1,4 @@
-local core_vehicles, pairs, ipairs, type, tableContainsCaseInsensitive, math = core_vehicles, pairs, ipairs, type, tableContainsCaseInsensitive, math
+﻿local core_vehicles, pairs, ipairs, type, tableContainsCaseInsensitive, math = core_vehicles, pairs, ipairs, type, tableContainsCaseInsensitive, math
 
 local function std__ranges__any_of(iterable, predicate)
 	for k, v in pairs(iterable) do
@@ -55,6 +55,7 @@ local function init()
 	}
 
 	local configs = core_vehicles.getConfigList(true).configs
+	local parsedFiles = core_vehicles.getFilesParsed()
 
 	for _, config in ipairs(configs) do
 		if  type(config) == "table" and
@@ -64,6 +65,7 @@ local function init()
 			type(config.aggregates.Type) == "table" and
 			type(config.aggregates.Source) == "table" and
 			(not config.useSubCluster or type(config.vehicleSelectorSubCluster) == "string") and
+			parsedFiles[string.format("/vehicles/%s/info.json", config.model_key)] and
 			std__ranges__none_of(config.aggregates.Type, function(k, v)
 				return tableContainsCaseInsensitive(VEHICLE_TYPE_BLACKLIST, k)
 			end) then
