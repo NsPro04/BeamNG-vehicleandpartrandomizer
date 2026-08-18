@@ -1,4 +1,4 @@
-﻿local core_vehicles, pairs, ipairs, type, tableContainsCaseInsensitive, math = core_vehicles, pairs, ipairs, type, tableContainsCaseInsensitive, math
+local core_vehicles, pairs, ipairs, type, tableContainsCaseInsensitive, math = core_vehicles, pairs, ipairs, type, tableContainsCaseInsensitive, math
 
 local function std__ranges__any_of(iterable, predicate)
 	for k, v in pairs(iterable) do
