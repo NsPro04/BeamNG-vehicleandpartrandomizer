@@ -30,7 +30,7 @@ local function onUpdate(dt)
 	if not windowOpen[0] then return end
 
 	im.SetNextWindowSize(im.ImVec2(windowSize.width, windowSize.height), im.Cond_FirstUseEver)
-	im.Begin("Vehicle And Part Randomizer by _N_S_ v3", windowOpen)
+	im.Begin("Vehicle And Part Randomizer by _N_S_ v4", windowOpen)
 		local SCALE = im.GetWindowWidth() / 336
 		im.SetWindowFontScale(SCALE)
 
