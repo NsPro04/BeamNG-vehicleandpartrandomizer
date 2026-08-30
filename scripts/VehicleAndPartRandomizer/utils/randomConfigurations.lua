@@ -1,29 +1,8 @@
 local core_vehicles, pairs, ipairs, type, tableContainsCaseInsensitive, math = core_vehicles, pairs, ipairs, type, tableContainsCaseInsensitive, math
 
-local function std__ranges__any_of(iterable, predicate)
-	for k, v in pairs(iterable) do
-		if predicate(k, v) then return true end
-	end
-	return false
-end
-
-local function std__ranges__none_of(iterable, predicate)
-	for k, v in pairs(iterable) do
-		if predicate(k, v) then return false end
-	end
-
-	return true
-end
-
-local function std__reduce(iterable, init, binary_op)
-	local result = init
-
-	for k, v in pairs(iterable) do
-		result = binary_op(result, v)
-	end
-
-	return result
-end
+local std__ranges__any_of  = require "scripts/VehicleAndPartRandomizer/utils/std__ranges__any_of"
+local std__ranges__none_of = require "scripts/VehicleAndPartRandomizer/utils/std__ranges__none_of"
+local std__reduce          = require "scripts/VehicleAndPartRandomizer/utils/std__reduce"
 
 local function _sum_by_source(self, official, mod)
 	return
